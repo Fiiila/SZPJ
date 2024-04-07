@@ -30,7 +30,7 @@ Avšak veškeré metody pro výpočet jsou obsažené ve skriptu [vector_search.
 které jsou pak do [main.py](./main.py) importovány.
 
 ## Výsledky
-**MAP** na dev datech: **0.3625** (při použití stemmingu) / **0.3277** (bez stemmingu)
+**MAP** na dev datech: $\color{red}{\textsf{0.3625}}$ (při použití stemmingu) / $\color{red}{\textsf{0.3277}}$ (bez stemmingu)
 
 ## Krátká dokumentace
 Krátký popis metod a postupu [zde](./LatexReferat/main.pdf)
