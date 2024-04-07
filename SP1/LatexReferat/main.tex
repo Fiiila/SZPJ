@@ -22,7 +22,9 @@
 \usepackage{amsmath}%psani matic
 \usepackage{mathrsfs}%psani kroucenym matematickym pismem
 \usepackage{pdfpages}%vkladani celych pdf dokumentu
+\usepackage{listings, lstautogobble}% pro renderovani kodu
 %cesta k obrazkum: ./Graphics/....
+\lstset{frame=tb, autogobble=true}
 
 \begin{document}
 	\input{titlepage}
@@ -33,6 +35,38 @@
 	\includepdf[page=2-, pagecommand={}]{./SZPJ_SP1_zadani.pdf}
 	
 	\section{Úvod}
+		Cílem této semestrální práce bylo implementovat v jazyce Python vektorový model s tf-idf vahami pro vyhledávání informací. Skript byl napsán tak aby zpracovával dotazy zadané v xml souboru a nikoliv interakvivní formou. Čistě pro testování přístupu a jeho benchmark.
+		
+		Zdrojový kód je dostupný i s návodem k použití na GitHub repository (\href{https://github.com/Fiiila/SZPJ.git}{https://github.com/Fiiila/SZPJ.git}).
+		
+	\section{Dokumentace skriptu}
+		\subsection{Předzpracování}
+			Při prvním kroku implementace bylo potřeba správně naparsovat zdrojové soubory html a identifikovat tak jen relevantní obsah. Jako první byly vymazány řádky obsahující tagy například \verb*|<html>,</html>,<pre>,</pre>|. Dále pak byly identifikovány pro vyhledávání nerelevantní řádky obsahující pouze číselné hodnoty a také řádek s informací pravděpodobně o přístupu ke článku ve tvaru například \textit{CA581203 JB March 22, 1978  8:28 PM}.
+			
+			Po vynechání zmíněných řádků byly zbývající zbaveny prázdných charakterů na okrajích funkcí \verb*|strip()| a spojeny do skupin dle rozdělení prázdnými řádky. Tato funkcionalita je sice nadbytečná ale v případě vyhledávání například ve specifickém roce nebo v jedné části textu by mohla zjednodušit a zrychlit vyhledávání zejména při použití většího zdrojového datasetu za pomoci filtrace nebo vytváření subsetů pro vektorizaci.
+			
+			Při samotném vytvoření datasetu byla navíc odstraněna základní interpunkce, aby se eliminovala souvislost hledaných výrazů a interpunkce. V tomto duchu byla později implementovaná i metoda stemming z knihovny \href{https://www.nltk.org/howto/stem.html}{NLTK}\footnote{https://www.nltk.org/howto/stem.html}, která v nejrůznějších tvarech slov nalezne kořen slova čímž je pak původní slovo v dokumentu nahrazeno. Jednotlivá slova byla rozdělena tokenizací pomocí knihovnou \href{https://www.nltk.org/api/nltk.tokenize.word_tokenize.html}{NLTK}\footnote{https://www.nltk.org/api/nltk.tokenize.word\_tokenize.html} Stejný postup se použije i při načítání jednotlivých dotazů pro vyhledávání. Celkové MAP bylo tak zlepšeno o \(\approx10.62\%\).
+			
+		\subsection{Vektorový model}
+			Zvolený vektorový model byl z knihovny \href{https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html}{skicit-learn}\footnote{https://scikit-learn.org/stable/modules/generated/sklearn.feature\_extraction.text.TfidfVectorizer.html} prezentovaný na přednáškách pro jeho jednoduchost. Při experimentaci s parametry bylo dosaženo nejlepších výsledků s následujícím nastavením.
+			
+			\begin{lstlisting}[language=Python]
+				# Specify vectorizer object and transform data
+				tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=True, 
+										sublinear_tf=True, 
+										stop_words='english'
+										)
+			\end{lstlisting}
+			
+			Normalizace výstupních řádků nepřinesla žádné zlepšení, naopak \verb*|use_idf| pomohlo z podstaty věci aktivovat kdy při deaktivaci je \(idf(t)=1\). Vyhlazení vážení idf pomocí \verb*|smooth_idf| také zlepšilo MAP podobně jako použití logaritmického škálování \verb*|tf| jako \(1+\log(tf)\). Výhoda byla také při použití parametru \verb*|stop_words='english'| která při tokenizaci eliminuje slova které nemají velký vliv na samotnou informaci obsaženou v textu jako je 'the', 'and', 'him'.
+			
+	\newpage		
+	\section{Závěr}
+		V této semestrální práci byly aplikovány znalosti z přednášek předmětu SZPJ, zejména pro rozdělení informace na tokeny a samotné vektorové vyhledávání. Testováním a použitím všech zmíněných argumentů a metod při parsování a výběru podstatných informací bylo dosaženo na testovacím datasetu skóre \(MAP\approx0.3625\).
+			
+			
+			
+			
 		
 	
 \end{document}
