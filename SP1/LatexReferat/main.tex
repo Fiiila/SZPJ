@@ -1,0 +1,38 @@
+\documentclass{article}
+
+\usepackage{mathptmx}
+%packages for language
+\usepackage[czech]{babel}
+\usepackage[utf8]{inputenc}
+%packages for graphic
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{multirow}
+\usepackage{tikz}
+\usepackage{import}
+\usepackage[a4paper, total={17cm,25.7cm}, top=2cm, left=2cm, includefoot]{geometry}
+\usepackage{todonotes}
+\usepackage{standalone}
+\usepackage{colortbl}%pro barevne zmeny v tabulce
+\usepackage{float}
+\usepackage{csvsimple} %pro import a práci s csv soubory
+\usepackage{indentfirst}  % odsazení prvního řádku v odstavci
+\usepackage{hyperref} %dela odkazy na mista v dokumentu atd
+\usepackage{amsmath}%psani matic
+\usepackage{mathrsfs}%psani kroucenym matematickym pismem
+\usepackage{pdfpages}%vkladani celych pdf dokumentu
+%cesta k obrazkum: ./Graphics/....
+
+\begin{document}
+	\input{titlepage}
+	
+	\tableofcontents
+	
+	\includepdf[page=1, pagecommand=\section{Zadání}]{./SZPJ_SP1_zadani.pdf}
+	\includepdf[page=2-, pagecommand={}]{./SZPJ_SP1_zadani.pdf}
+	
+	\section{Úvod}
+		
+	
+\end{document}
